@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <link rel='stylesheet' type='text/css' href='' />
+        <meta http-equiv='content-type' content='text/html; charset=utf-8' />
+        <meta name='viewport' content='initial-scale=1.0 maximum-scale=1.0'>
+        <style>
+        .wrapper {
+            width: 100%;
+            height: 100%;
+        }
+        path {
+            fill: none;
+            stroke: black;
+            stroke-width: 3;
+            stroke-linecap: round;
+            stroke-dasharray: 1, 8;
+        }
+        .i1 {
+            stroke-width: 3.5;
+            stroke-dasharray: 1, 10;
+        }
+        .i2 {
+            stroke-width: 4;
+            stroke-dasharray: 1, 15;
+        }
+        .i3 {
+            stroke-width: 4.5;
+            stroke-dasharray: 1, 13;
+        }
+        .i4 {
+            stroke-width: 5;
+            stroke-dasharray: 1, 19;
+        }
+        .i5 {
+            stroke-width: 5.5;
+            stroke-dasharray: 1, 18;
+        }
+        .i6 {
+            stroke-width: 6;
+            stroke-dasharray: 1, 17;
+        }
+        .i7 {
+            stroke-width: 6.5;
+            stroke-dasharray: 1, 18;
+        }
+        .i8 {
+            stroke-width: 7;
+            stroke-dasharray: 1, 23;
+        }
+        .i9 {
+            stroke-width: 7.5;
+            stroke-dasharray: 1, 29;
+        }
+        </style>
+    </head>
+    <body>
+        <div class="wrapper"></div>
+        <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+        <script>
+        var canvas = d3.select('.wrapper')
+            .append('svg')
+            .attr('width', window.innerWidth)
+            .attr('height', window.innerHeight)
+            .append('g')
+                .attr('transform', 'translate(' +
+                    window.innerWidth/2 + ',' +
+                    window.innerHeight/2 + ')');
+
+        var starter_data = [
+            [50, 0],
+            [0, -50],
+            [-50, 0],
+            [0, 50]
+        ];
+
+        var rings = 10;
+
+        var scale = d3.scale.linear()
+                        .domain([0, rings]);
+
+        var data = d3.range(rings).map(function (n) {
+            var current = [];
+            starter_data.forEach(function (d, i) {
+                current.push( 
+                    [d[0] ? ((d[0] * scale(n) * 5) + d[0]): 0,
+                     d[1] ? ((d[1] * scale(n) * 5) + d[1]): 0]
+                )
+            });
+
+            return current;
+        });
+
+        var line = d3.svg.line()
+                    .tension(0)
+                    .interpolate("basis-closed");
+
+        var path = canvas.selectAll('path')
+            .data(data)
+            .enter()
+            .append('path')
+            .attr('class', function (d,i) {
+                return 'i'+i;
+            })
+            .attr("d", function (d) {
+                return line(d);
+            });
+
+        </script>
+    </body>
+</html>

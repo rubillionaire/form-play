@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <link rel='stylesheet' type='text/css' href='' />
+        <meta http-equiv='content-type' content='text/html; charset=utf-8' />
+        <meta name='viewport' content='initial-scale=1.0 maximum-scale=1.0'>
+        <style>
+        .wrapper {
+            width: 100%;
+            height: 100%;
+        }
+        </style>
+    </head>
+    <body>
+        <div class="wrapper"></div>
+        <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+        <script>
+        var canvas = d3.select('.wrapper')
+            .append('svg')
+            .attr('width', window.innerWidth)
+            .attr('height', window.innerHeight)
+            .append('g')
+                .attr('transform', 'translate(' +
+                    window.innerWidth/2 + ',' +
+                    window.innerHeight/2 + ')');
+
+        var rings = 10;
+
+        var scale = d3.scale.linear()
+                        .domain([0, rings]);
+
+        var radians = Math.PI * 2;
+        var number_of_vectors = 60;
+        var center_radius = 80;
+        var length_of_vector = 300;
+        var number_of_nodes = 10;
+        var between_vectors = radians/number_of_vectors;
+
+        var vectors = d3.range(number_of_vectors).map(function (n) {
+            var theta = n * between_vectors;
+            return {
+                theta: theta,
+                x: center_radius * Math.cos(theta),
+                y: center_radius * Math.sin(theta)
+            };
+        });
+
+        var arrays = vectors.map(function (d, i) {
+            var current = [];
+            var variable_radius = d3.scale.linear()
+                .domain([0, number_of_nodes])
+                .range([0, length_of_vector]);
+
+            var scale = d3.scale.linear()
+                .domain([0, number_of_nodes])
+                .range([0.4, 1.0])
+
+            for (var j = 0; j < number_of_nodes; j++) {
+
+                current.push({
+                    x: d.x + (variable_radius(j) *
+                                    Math.cos(d.theta)),
+                    y: d.y + (variable_radius(j) *
+                                    Math.sin(d.theta)),
+                    scale: scale(j)
+                });
+            }
+            return current;
+        });
+
+        console.log(arrays);
+
+        var merged = [];
+        var data = merged.concat.apply(merged, arrays);
+
+        console.log(data);
+
+        var circles = canvas.selectAll('circle')
+            .data(data)
+            .enter()
+            .append('circle')
+            .attr('cx', function (d) {
+                return d.x;
+            })
+            .attr('cy', function (d) {
+                return d.y;
+            })
+            .attr('r', 5)
+            .attr('transform', function (d) {
+                return 'matrix(' + d.scale + ',' +
+                                   '0,0,' +
+                                   d.scale + ',' +
+                                   (d.x - d.scale * d.x) + ',' +
+                                   (d.y - d.scale * d.y) +')';
+                // return 'scale(' + d.scale + ')';
+            });
+
+        </script>
+    </body>
+</html>
