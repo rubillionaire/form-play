@@ -9300,7 +9300,7 @@ var d3 = require('d3');
 
 var canvas = d3.select('.canvas'),
     format = d3.format("03d"),
-    entries = d3.range(1,22).map(function (n, i) {
+    entries = d3.range(1,25).map(function (n, i) {
         return {
             index: format(n) + "/index.html"
         };
