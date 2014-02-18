@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <link rel='stylesheet' type='text/css' href='' />
+        <meta http-equiv='content-type' content='text/html; charset=utf-8' />
+        <meta name='viewport' content='initial-scale=1.0 maximum-scale=1.0'>
+        <style>
+        body {
+            background: #412D6D;
+            margin: 0;
+            padding: 0;
+            width 100%;
+        }
+        .wrapper {
+            width: 100%;
+            height: 100%;
+        }
+        circle {
+            fill: white;
+        }
+        </style>
+    </head>
+    <body>
+        <div class="wrapper"></div>
+        <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+        <script>
+
+        d3.xml('sample.svg', function (err, response) {
+            console.log(response);
+            var resp_path = d3.select(response).select('path');
+            window.path = resp_path;
+            console.log(resp_path);
+
+            var path = d3.select('.wrapper')
+                .append('svg')
+                .attr('width', window.innerWidth)
+                .attr('height', window.innerHeight)
+                .append('path')
+                    .attr('d', resp_path.attr('d'));
+        });
+        </script>
+    </body>
+</html>

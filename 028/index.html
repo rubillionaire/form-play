@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <link rel='stylesheet' type='text/css' href='' />
+        <meta http-equiv='content-type' content='text/html; charset=utf-8' />
+        <meta name='viewport' content='initial-scale=1.0 maximum-scale=1.0'>
+        <style>
+        body {
+            background: rgb(255, 0, 224);
+            margin: 0;
+            padding: 0;
+            width 100%;
+        }
+        .wrapper {
+            width: 100%;
+            height: 100%;
+        }
+        .foreground {
+            fill: white;
+            opacity: 0.7;
+        }
+        .circle1,
+        .circle2,
+        .circle3,
+        .circle4,
+        .circle5 {
+            stroke: white;
+        }
+        .circle1 {
+            opacity: 0.9;
+        }
+        .circle2 {
+            opacity: 0.9;
+        }
+        .circle3 {
+            opacity: 0.8;
+        }
+        .circle4 {
+            opacity: 0.7;
+        }
+        .circle5 {
+            opacity: 0.6;
+        }
+        .circle6 {
+            opacity: 0.5;
+        }
+        </style>
+    </head>
+    <body>
+        <div class="wrapper"></div>
+        <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+        <script>
+        var fam = [{
+                r: 30
+            }, {
+                r: 20
+            }, {
+                r: 30
+            }, {
+                r: 30
+            }, {
+                r: 30
+            }, {
+                r: 30
+            }, {
+                r: 30
+            }];
+
+        var svg = d3.select('.wrapper')
+            .append('svg')
+            .attr('width', window.innerWidth)
+            .attr('height', window.innerHeight)
+            .append('g')
+                .attr('transform', 'translate('+
+                    window.innerWidth/2 + ',' +
+                    window.innerHeight/2 + ')');
+
+        var radians = Math.PI * 2;
+        var number_of_vectors = 700;
+        var center_radius = 300;
+        var between_vectors = radians/number_of_vectors;
+        var center_radius = {
+            'circle1': 30,
+            'circle2': 150,
+            'circle3': 200,
+            'circle4': 300,
+            'circle5': 400,
+            'circle6': 500
+        }
+
+        var vectors = d3.range(number_of_vectors)
+            .map(function (n) {
+                var klass = 'circle6';
+                if ((n%2) === 0) {
+                    klass = 'circle5';
+                }
+                if((n%5) === 0) {
+                    klass = 'circle4';    
+                }
+                if ((n%10) === 0) {
+                    klass = 'circle3';
+                }
+                if ((n%50) === 0) {
+                    klass = 'circle2';
+                }
+                if ((n%(number_of_vectors/fam.length)) === 0) {
+                    klass = 'circle1';
+                }
+                var theta = n * between_vectors;
+                return {
+                    x1: center_radius[klass] * Math.cos(theta),
+                    y1: center_radius[klass] * Math.sin(theta),
+                    x2: (center_radius[klass] * Math.cos(theta)) + 10000 * Math.cos(theta),
+                    y2: (center_radius[klass] * Math.sin(theta)) +  + 10000 * Math.sin(theta),
+                    klass: klass
+                }
+            });
+
+
+        var people = svg.selectAll('.background')
+            .data(vectors)
+            .enter()
+            .append('line')
+            .attr('class', function (d) {
+                return 'background ' + d.klass;
+            })
+            .attr('x1', function (d) { return d.x1; })
+            .attr('y1', function (d) { return d.y1; })
+            .attr('x2', function (d) { return d.x2; })
+            .attr('y2', function (d) { return d.y2; });
+
+        var fam_radius = 80;
+        var between_fam = radians / fam.length;
+        fam.forEach(function (d, i) {
+            var theta = between_fam * i;
+            d.x = fam_radius * Math.cos(theta);
+            d.y = fam_radius * Math.sin(theta);
+        });
+
+        var circles = svg.selectAll('.foreground')
+            .data(fam)
+            .enter()
+            .append('circle')
+            .attr('class', 'foreground')
+            .attr('cx', function (d) { return d.x; })
+            .attr('cy', function (d) { return d.y; })
+            .attr('r', function (d) { return d.r; });
+        </script>
+    </body>
+</html>

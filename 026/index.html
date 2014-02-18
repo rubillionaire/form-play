@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <link rel='stylesheet' type='text/css' href='' />
+        <meta http-equiv='content-type' content='text/html; charset=utf-8' />
+        <meta name='viewport' content='initial-scale=1.0 maximum-scale=1.0'>
+        <style>
+        body {
+            background: rgb(255, 0, 224);
+            margin: 0;
+            padding: 0;
+            width 100%;
+        }
+        .wrapper {
+            width: 100%;
+            height: 100%;
+        }
+        .foreground {
+            fill: white;
+            opacity: 0.8;
+        }
+        .background {
+            stroke: white;
+        }
+        </style>
+    </head>
+    <body>
+        <div class="wrapper"></div>
+        <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+        <script>
+
+        var svg = d3.select('.wrapper')
+            .append('svg')
+            .attr('width', window.innerWidth)
+            .attr('height', window.innerHeight)
+            .append('g')
+                .attr('transform', 'translate('+
+                    window.innerWidth/2 + ',' +
+                    window.innerHeight/2 + ')');
+
+        var radians = Math.PI * 2;
+        var number_of_vectors = 80;
+        var center_radius = 100;
+        var between_vectors = radians/number_of_vectors;
+
+        var vectors = d3.range(number_of_vectors).map(function (n) {
+            var theta = n * between_vectors;
+            return {
+                theta: theta,
+                x1: center_radius * Math.cos(theta),
+                y1: center_radius * Math.sin(theta),
+                x2: (center_radius * Math.cos(theta)) + 
+                    (200 * Math.cos(theta)),
+                y2: (center_radius * Math.sin(theta)) + 
+                    (200 * Math.sin(theta))
+            };
+        });
+
+        console.log(vectors);
+
+        var bg = svg.selectAll('.background')
+            .data(vectors)
+            .enter()
+            .append('line')
+            .attr('class', 'background')
+            .attr('x1', function (d) { return d.x1; })
+            .attr('y1', function (d) { return d.y1; })
+            .attr('x2', function (d) { return d.x2; })
+            .attr('y2', function (d) { return d.x2; });
+
+        var circles = svg.selectAll('.foreground')
+            .data([{
+                x: 100,
+                y: 0,
+                r: 50
+            }, {
+                x: 0,
+                y: 100,
+                r: 50
+            }, {
+                x: -100,
+                y: 0,
+                r: 50
+            }, {
+                x: 0,
+                y: -100,
+                r: 30
+            }])
+            .enter()
+            .append('circle')
+            .attr('class', 'foreground')
+            .attr('cx', function (d) { return d.x; })
+            .attr('cy', function (d) { return d.y; })
+            .attr('r', function (d) { return d.r; });
+        </script>
+    </body>
+</html>
