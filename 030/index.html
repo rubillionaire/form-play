@@ -7,7 +7,6 @@
         <meta name='viewport' content='initial-scale=1.0 maximum-scale=1.0'>
         <style>
         body {
-            background: rgb(255, 0, 224);
             margin: 0;
             padding: 0;
             width 100%;
@@ -15,35 +14,6 @@
         .wrapper {
             width: 100%;
             height: 100%;
-        }
-        .foreground {
-            fill: white;
-            opacity: 0.7;
-        }
-        .circle1,
-        .circle2,
-        .circle3,
-        .circle4,
-        .circle5 {
-            stroke: white;
-        }
-        .circle1 {
-            opacity: 0.7;
-        }
-        .circle2 {
-            opacity: 0.9;
-        }
-        .circle3 {
-            opacity: 0.8;
-        }
-        .circle4 {
-            opacity: 0.7;
-        }
-        .circle5 {
-            opacity: 0.6;
-        }
-        .circle6 {
-            opacity: 0.5;
         }
         </style>
     </head>
@@ -62,34 +32,77 @@
                     window.innerHeight/2 + ')');
 
         var radians = Math.PI * 2;
-        var number_of_vectors = 720;
+        var number_of_vectors = 1440;
         var center_radius = 300;
         var between_vectors = radians/number_of_vectors;
         var center_radius = {
-            'circle1': 30,
-            'circle2': 120,
-            'circle3': 200,
-            'circle4': 300,
-            'circle5': 400,
-            'circle6': 500
+            'circle1': 20,
+            'circle2': 100,
+            'circle3': 140,
+            'circle4': 180,
+            'circle5': 220,
+            'circle6': 260,
+            'circle7': 300,
+            'circle8': 340,
+            'circle9': 380,
+            'circle10': 420,
+            'circle11': 460,
+            'circle12': 500,
+            'circle13': 540
+        }
+        var opacity = {
+            'circle1': 1,
+            'circle2': 0.9,
+            'circle3': 0.8,
+            'circle4': 0.7,
+            'circle5': 0.6,
+            'circle6': 0.5,
+            'circle7': 0.4,
+            'circle8': 0.3,
+            'circle9': 0.3,
+            'circle10': 0.3,
+            'circle11': 0.3,
+            'circle12': 0.3,
+            'circle13': 0.3
         }
 
         var vectors = d3.range(number_of_vectors)
             .map(function (n) {
-                var klass = 'circle6';
+                var klass = 'circle13';
                 if ((n%2) === 0) {
-                    klass = 'circle5';
+                    klass = 'circle12';
                 }
                 if((n%4) === 0) {
-                    klass = 'circle4';    
+                    klass = 'circle11';    
                 }
-                if ((n%8) === 0) {
-                    klass = 'circle3';
+                if ((n%6) === 0) {
+                    klass = 'circle10';
+                }
+                if ((n%10) === 0) {
+                    klass = 'circle9';
+                }
+                if ((n%12) === 0) {
+                    klass = 'circle8';
+                }
+                if ((n%14) === 0) {
+                    klass = 'circle7';
+                }
+                if ((n%16) === 0) {
+                    klass = 'circle6';
+                }
+                if ((n%20) === 0) {
+                    klass = 'circle5';
+                }
+                if ((n%24) === 0) {
+                    klass = 'circle4';
                 }
                 if ((n%40) === 0) {
-                    klass = 'circle2';
+                    klass = 'circle3';
                 }
                 if ((n%180) === 0) {
+                    klass = 'circle2';
+                }
+                if ((n%360) === 0) {
                     klass = 'circle1';
                 }
                 var theta = n * between_vectors;
@@ -113,35 +126,42 @@
             .attr('x1', function (d) { return d.x1; })
             .attr('y1', function (d) { return d.y1; })
             .attr('x2', function (d) { return d.x2; })
-            .attr('y2', function (d) { return d.y2; });
+            .attr('y2', function (d) { return d.y2; })
+            .style('opacity', function (d) {
+                return opacity[d.klass];
+            })
+            .style('stroke', '#00B1FF')
+            .style('fill', '#00B1FF');
 
 
 
 
         var circles = svg.selectAll('.foreground')
             .data([{
-                x: 80,
+                x: 50,
                 y: 0,
-                r: 30
+                r: 25
             }, {
                 x: 0,
-                y: 80,
-                r: 30
+                y: 50,
+                r: 25
             }, {
-                x: -80,
+                x: -50,
                 y: 0,
-                r: 30
+                r: 25
             }, {
                 x: 0,
-                y: -80,
-                r: 20
+                y: -50,
+                r: 15
             }])
             .enter()
             .append('circle')
             .attr('class', 'foreground')
             .attr('cx', function (d) { return d.x; })
             .attr('cy', function (d) { return d.y; })
-            .attr('r', function (d) { return d.r; });
+            .attr('r', function (d) { return d.r; })
+            .style('fill', '#00B1FF')
+            .style('opacity', 0.5);
         </script>
     </body>
 </html>

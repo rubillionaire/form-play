@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <link rel='stylesheet' type='text/css' href='' />
+        <meta http-equiv='content-type' content='text/html; charset=utf-8' />
+        <meta name='viewport' content='initial-scale=1.0 maximum-scale=1.0'>
+        <style>
+        body {
+            margin: 0;
+            padding: 0;
+            width 100%;
+        }
+        .wrapper {
+            width: 100%;
+            height: 100%;
+        }
+        </style>
+    </head>
+    <body>
+        <div class="wrapper"></div>
+        <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+        <script>
+
+        var svg = d3.select('.wrapper')
+            .append('svg')
+            .attr('width', window.innerWidth)
+            .attr('height', window.innerHeight);
+
+        var row_gap = 10;
+        var rows = window.innerHeight/row_gap;
+        var col_gap = 10;
+        var length_scale = d3.scale.linear()
+            .domain([0,1])
+            .range([5,100]);
+
+        var opacity_scale = d3.scale.linear()
+            .domain([0, 1])
+            .range([0.3, 1]);
+
+        var x_scale = d3.scale.linear()
+            .domain([0, window.innerWidth])
+            .range([window.innerWidth, 0]);
+
+
+        var vectors = [];
+        var circles = []
+
+        d3.range(rows)
+            .map(function (n) {
+                var total_row_width = window.innerWidth;
+                while (total_row_width >=0) {
+                    var cur_length = length_scale(Math.random()),
+                        cur_opacity = opacity_scale(Math.random());
+                    vectors.push({
+                        x1: x_scale(total_row_width),
+                        y1: n * row_gap,
+                        x2: x_scale(total_row_width - cur_length),
+                        y2: n * row_gap,
+                        opacity: cur_opacity
+                    });
+                    circles.push({
+                        x: x_scale(total_row_width - cur_length),
+                        y: n * row_gap,
+                        opacity: cur_opacity
+                    })
+
+                    total_row_width -= cur_length + col_gap;
+                }
+            });
+
+
+        var people = svg.selectAll('.background')
+            .data(vectors)
+            .enter()
+            .append('line')
+            .attr('class', function (d) {
+                return 'background ' + d.klass;
+            })
+            .attr('x1', function (d) { return d.x1; })
+            .attr('y1', function (d) { return d.y1; })
+            .attr('x2', function (d) { return d.x2; })
+            .attr('y2', function (d) { return d.y2; })
+            .style('opacity', function (d) {
+                return d.opacity;
+            })
+            .style('stroke', '#00B1FF')
+            .style('fill', '#00B1FF');
+
+        var direction = svg.selectAll('circle')
+            .data(circles)
+            .enter()
+            .append('circle')
+            .attr('cx', function (d) { return d.x })
+            .attr('cy', function (d) { return d.y })
+            .attr('r', 2)
+            .style('opacity', function (d) {
+                return d.opacity;
+            })
+            .style('fill', '#00B1FF');
+        </script>
+    </body>
+</html>
